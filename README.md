@@ -11,6 +11,7 @@ This extension contributes the following settings:
 * `onelineify.maxLineLength`: Defaults to 120. If a onelineified line would be longer than this value, onelineifying is prevented.
 * `onelineify.padCurlyBraces`: Defaults to true. Ensures a single space after an opening `{` and before a closing `}`
 * `onelineify.padSquareBrackets`: Defaults to false. Ensures a single space after an opening `[` and before a closing `]`
+* `onelineify.padParens`: Defaults to false. Ensures a single space after an opening `(` and before a closing `)`
 
 ## Known Issues
 
@@ -18,6 +19,11 @@ None so far!
 
 ## Release Notes
 
+### 0.0.2
+
+- Add the `padParens` option
+- Fix an issue related to trailing new lines in a selection
+- Fix an issue where too many spaces were being included after colons in object notation
 ### 0.0.1
 
 Initial release!

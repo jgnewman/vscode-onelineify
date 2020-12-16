@@ -1,8 +1,9 @@
 import * as vscode from 'vscode'
 
 function oneLineify(textEditor: vscode.TextEditor, startLine: number, endLine: number) {
-  const { maxLineLength, padCurlyBraces, padSquareBrackets } = vscode.workspace.getConfiguration('onelineify')
+  const { maxLineLength, padCurlyBraces, padSquareBrackets, padParens } = vscode.workspace.getConfiguration('onelineify')
   const initialSpacing = textEditor.document.lineAt(startLine).text.replace(/[^\s].*$/, '')
+
   let lines: string[] = []
 
   for (let i = startLine; i <= endLine; i++) {
@@ -12,27 +13,37 @@ function oneLineify(textEditor: vscode.TextEditor, startLine: number, endLine: n
     }
   }
 
-  let joined = lines.join(' ')
+  let joined: string
+  joined = lines.join(' ')
   joined = joined.replace(/,([^\s])/g, ', $1') // ensure spaces after commas
   joined = joined.replace(/\s+,/g, ',') // remove spaces before commas
   joined = joined.replace(/,{2,}/g, ',') // remove extra commas appearing together
-  joined = joined.replace(/(\{|\[)\s*,\s*/g, '$1') // ensure the first item is not a comma
-  joined = joined.replace(/\s*,\s*(\}|\])/g, '$1') // ensure the last item is not a comma
+  joined = joined.replace(/(\{|\(|\[)\s*,\s*/g, '$1') // ensure the first item is not a comma
+  joined = joined.replace(/\s*,\s*(\}|\)|\])/g, '$1') // ensure the last item is not a comma
+  joined = joined.replace(/\:\s+/g, ': ') // ensure only once space falls after colons
 
   if (padCurlyBraces) {
     joined = joined.replace(/\{([^\s])/g, '{ $1') // ensure a space after opening `{`
     joined = joined.replace(/([^\s]+)\}/g, '$1 }') // ensure a space before closing `}`
   } else {
-    joined = joined.replace(/\{\s+/g, '{') // ensure no space after opening `[`
-    joined = joined.replace(/\s+\}/g, '}') // ensure no space before closing `]`
+    joined = joined.replace(/\{\s+/g, '{') // ensure no space after opening `{`
+    joined = joined.replace(/\s+\}/g, '}') // ensure no space before closing `{`
   }
 
   if (padSquareBrackets) {
-    joined = joined.replace(/\[([^\s])/g, '[ $1') // ensure a space after opening `{`
-    joined = joined.replace(/([^\s]+)\]/g, '$1 ]') // ensure a space before closing `}`
+    joined = joined.replace(/\[([^\s])/g, '[ $1') // ensure a space after opening `[`
+    joined = joined.replace(/([^\s]+)\]/g, '$1 ]') // ensure a space before closing `]`
   } else {
     joined = joined.replace(/\[\s+/g, '[') // ensure no space after opening `[`
     joined = joined.replace(/\s+\]/g, ']') // ensure no space before closing `]`
+  }
+
+  if (padParens) {
+    joined = joined.replace(/\(([^\s])/g, '( $1') // ensure a space after opening `(`
+    joined = joined.replace(/([^\s]+)\)/g, '$1 )') // ensure a space before closing `)`
+  } else {
+    joined = joined.replace(/\(\s+/g, '(') // ensure no space after opening `(`
+    joined = joined.replace(/\s+\)/g, ')') // ensure no space before closing `)`
   }
 
   joined = initialSpacing + joined
@@ -65,7 +76,10 @@ export function activate(context: vscode.ExtensionContext) {
       return selection
     }
 
-    return oneLineify(textEditor, selection.start.line, selection.end.line)
+    const hasTrailingNewLine = textEditor.selection.end.character === 0
+    const endLine = hasTrailingNewLine ? selection.end.line - 1 : selection.end.line
+
+    return oneLineify(textEditor, selection.start.line, endLine)
   })
 
   context.subscriptions.push(main)
