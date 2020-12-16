@@ -5,6 +5,10 @@
   "description": "Converts multi-line objects and arrays to single-line notation",
   "icon": "images/exticon.png",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jgnewman/vscode-onelineify.git"
+  },
   "engines": {
     "vscode": "^1.52.0"
   },
