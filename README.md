@@ -19,11 +19,6 @@ None so far!
 
 ## Release Notes
 
-### 0.0.2
+### 0.0.3
 
-- Add the `padParens` option
-- Fix an issue related to trailing new lines in a selection
-- Fix an issue where too many spaces were being included after colons in object notation
-### 0.0.1
-
-Initial release!
+- Better formatting of extension documentation

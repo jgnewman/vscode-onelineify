@@ -1,9 +1,15 @@
 # Change Log
 
-All notable changes to the "onelineify" extension will be documented in this file.
+## 0.0.3
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- Better formatting of extension documentation
 
-## [Unreleased]
+## 0.0.2
+
+- Add the `padParens` option
+- Fix an issue related to trailing new lines in a selection
+- Fix an issue where too many spaces were being included after colons in object notation
+
+## 0.0.1
 
 - Initial release
