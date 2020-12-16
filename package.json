@@ -2,6 +2,7 @@
   "name": "onelineify",
   "displayName": "Onelineify",
   "description": "Converts multi-line objects and arrays to single-line notation",
+  "icon": "images/exticon.png",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.52.0"
